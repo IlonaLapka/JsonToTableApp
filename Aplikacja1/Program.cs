@@ -17,25 +17,35 @@ namespace Aplikacja1
                 Console.Write("Podaj sciezke do pliku: ");
                 string path = Console.ReadLine();
 
-                List<Person> persons = new List<Person>();
-
+                List<dynamic> data = new List<dynamic>();
+                List<string> headings = new List<string>();
+                
                 try
                 {
                     using StreamReader r = new StreamReader(path);
                     string json = r.ReadToEnd();
                     if ((IsValidJson(json)))
                     {
-
-                        persons = JsonConvert.DeserializeObject<List<Person>>(json);
+                        data = JsonConvert.DeserializeObject<List<dynamic>>(json);                      
 
                         MakeLine();
-                        Console.WriteLine("|  IMIĘ  |  NAZWISKO  |  ZAWÓD  |  WIEK  |  MIEJSCE-URODZENIA  |");
-                        MakeLine();
-
-                        foreach (var person in persons)
+                        Console.Write("|");
+                        foreach (var item in data[0])
                         {
-                            Console.WriteLine("|  {0}  |  {1}  |  {2}  |  {3}  |  {4}  |", person.Name, person.Surname,
-                                person.Profession, person.Age, person.PlaceOfBirth);
+                            Console.Write("  {0}  |", item.Path.ToUpper());
+                            headings.Add(item.Path);
+                        }
+                        Console.WriteLine();
+                        MakeLine();
+
+                        foreach (var d in data)
+                        {
+                            Console.Write("|");
+                            for (int i = 0; i < headings.Count; i++)
+                            {
+                                Console.Write("  {0}  |", d[headings[i]]);
+                            }
+                            Console.WriteLine();
                             MakeLine();
                         }
                     }
